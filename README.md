@@ -6,7 +6,7 @@ Here's the updated README file based on your input:
 
 ## Overview
 
-"TOOL-decision_tree" is a comprehensive guide for developing GenAI-driven web applications. It provides key questions and actionable guidance derived from the methodological paper, ["Building GenAI-Driven Web Applications to Study USER-GenAI Interaction"](https://github.com/GenAI-interaction-research/.github).
+"TOOL-decision_tree" is a comprehensive guide for developing GenAI-driven web applications You can access it here: https://genai-interaction-research.github.io/TOOL-decision_tree. It provides key questions and actionable guidance derived from the methodological paper, ["Building GenAI-Driven Web Applications to Study USER-GenAI Interaction"](https://github.com/GenAI-interaction-research/.github).
 
 ## Features
 
