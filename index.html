@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAI Research App - Comprehensive Guide</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Comprehensive Guide to Developing GenAI-Driven Web Applications for Research</h1>
+        <p>
+            Based on the methodological paper:
+            <a href="https://github.com/GenAI-interaction-research/paper-and-resources/blob/main/250424_GenAI_web_apps_v0.1.pdf" target="_blank" rel="noopener noreferrer">"Building GenAI-Driven Web Applications to Study USER-GenAI Interaction"</a>
+            (Table 2: Guiding Questions). Click on a question to see guidance.
+        </p>
+    </header>
+
+    <nav id="table-of-contents">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#section1">1. GenAI Model Selection (Q1.x)</a></li>
+            <li><a href="#section2">2. API Usage & Configuration (Q2.x)</a></li>
+            <li><a href="#section3">3. Frontend Design & Setup (Q3.x)</a></li>
+            <li><a href="#section4">4. Backend Design & Hosting (Q4.x)</a></li>
+            <li><a href="#section5">5. General Considerations (Ethics, etc.) (Q5.x)</a></li>
+            <li><a href="#tools-and-resources">6. Tools & Additional Resources</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="section1" class="guide-section">
+            <h2>1. GenAI Model Selection (Q1.x)</h2>
+            <p class="section-intro">Choosing the right GenAI model is foundational. It involves understanding research goals and balancing model capabilities with practical constraints like cost, latency, and ethical considerations. Click on each question below for detailed guidance drawn from the methodological paper.</p>
+
+            <article id="q1_1" class="question-block">
+                <h3 class="question-title">Q1.1: What is the research question? (*) <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>Clearly defining the research question is the essential first step. The question will dictate the task the AI needs to perform, influencing required capabilities, interaction complexity, and output modality.</p>
+                    <p><em>Example (from the accompanying paper's showcases): How does LLM input modality (text vs. voice) affect user engagement with podcast recommendations?</em></p>
+                    <p>This question is marked with (*) because its answer is entirely specific to a given study and will shape answers to subsequent questions.</p>
+                </div>
+            </article>
+
+            <article id="q1_2" class="question-block">
+                <h3 class="question-title">Q1.2: What output/modality should the AI create? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>The primary type of content the AI needs to generate directly impacts model choice (referencing Table 3 in the methodological paper for an overview of models by modality):</p>
+                    <ul>
+                        <li><strong>Text:</strong> For conversation, summaries, translation, creative writing, etc., a Large Language Model (LLM) is needed. Examples: GPT series (OpenAI), Claude series (Anthropic), Gemini series (Google), Llama series (Meta).</li>
+                        <li><strong>Image:</strong> For generating images from text prompts. Examples: Stable Diffusion, Midjourney, DALL-E 3, Imagen 2, Recraft.</li>
+                        <li><strong>Code:</strong> For generating computer code. Examples: GitHub Copilot, AlphaCode 2, CodeLlama, specialized modes of Gemini/GPT.</li>
+                        <li><strong>Audio (Speech/TTS):</strong> For synthesizing human-like speech. Examples: <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer">ElevenLabs TTS</a>, Bark, VALL-E X.</li>
+                        <li><strong>Audio (Music/Sound):</strong> For generating music or sound effects. Examples: MusicLM, Stable Audio, AudioCraft.</li>
+                        <li><strong>Video:</strong> For creating video clips from text. Examples: OpenAI's <a href="https://openai.com/sora" target="_blank" rel="noopener noreferrer">Sora</a>, <a href="https://runwayml.com/" target="_blank" rel="noopener noreferrer">Runway Gen-3</a>. (API access may be limited or evolve rapidly).</li>
+                        <li><strong>Analysis/Multimodal (e.g., Image-to-Text, Video Analysis):</strong> Requires models that can process one modality and output another. Examples: Gemini Pro Vision, GPT-4V (for image input), <a href="https://openai.com/research/whisper" target="_blank" rel="noopener noreferrer">Whisper</a> (for audio-to-text).</li>
+                    </ul>
+                    <p>This choice will lead to specific families of models.</p>
+                </div>
+            </article>
+
+            <article id="q1_3" class="question-block">
+                <h3 class="question-title">Q1.3: What is the best balance between performance, costs, and latency? (*) <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>These three factors are often in tension:</p>
+                    <ul>
+                        <li><strong>Performance/Intelligence:</strong> Higher quality output, better reasoning. Typically larger, more expensive models. Figure 2 in the methodological paper provides a comparative analysis (data from Artificial Analysis 2025).</li>
+                        <li><strong>Cost:</strong> Price per API call (e.g., per 1M tokens for LLMs, per image generated). Varies significantly.</li>
+                        <li><strong>Latency:</strong> Time for the AI to respond. Crucial for interactive user experiences. Larger models can be slower.</li>
+                    </ul>
+                    <p>As noted in the methodological paper, "the best model is context-dependent." Experimentation or tools like <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener noreferrer">Artificial Analysis</a> and <a href="https://chat.lmsys.org/" target="_blank" rel="noopener noreferrer">LMSys Chatbot Arena</a> can help compare models objectively. Specific study needs and budget determine the optimal balance.</p>
+                </div>
+            </article>
+
+            <article id="q1_4" class="question-block">
+                <h3 class="question-title">Q1.4: What characteristics and capabilities should the GenAI have? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>Consider specific needs beyond basic generation:</p>
+                    <ul>
+                        <li><strong>Reasoning:</strong> Does the task require logical deduction, problem-solving, or following complex multi-step instructions? Some models are specifically designed or fine-tuned for this.</li>
+                        <li><strong>Web Search Integration:</strong> Does the AI need access to real-time, up-to-date information from the internet? Some models offer this as a built-in capability (check API documentation). For example, see <a href="https://perplexity.ai/" target="_blank" rel="noopener noreferrer">Perplexity AI</a> or models with web Browse features.</li>
+                        <li><strong>Open vs. Closed/Proprietary:</strong>
+                            <ul>
+                                <li><em>Open Models (Open Source):</em> Offer transparency, reproducibility, and potential for local execution (e.g., Llama series, Mixtral, Gemma). Local hosting requires significant infrastructure (GPUs, RAM) for performance comparable to large proprietary models. API providers like <a href="https://fireworks.ai/" target="_blank" rel="noopener noreferrer">Fireworks AI</a>, <a href="https://www.together.ai/" target="_blank" rel="noopener noreferrer">Together AI</a>, or <a href="https://groq.com/" target="_blank" rel="noopener noreferrer">Groq</a> often provide access to these.</li>
+                                <li><em>Proprietary Models:</em> Often leading-edge performance, but less transparency into architecture/training. Accessed via vendor APIs.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p>Evaluating these aligns the model's strengths with the application's purpose. The methodological paper discusses how "some models are specifically designed or fine-tuned for reasoning... Other models might be optimized for creative writing, code generation, or possess built-in capabilities to integrate real-time web search results."</p>
+                </div>
+            </article>
+
+            <article id="q1_5" class="question-block">
+                <h3 class="question-title">Q1.5: How large should the model's context window be? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>The context window is the amount of input text (measured in tokens) the model can consider at once. This is critical for:</p>
+                    <ul>
+                        <li><strong>Maintaining Conversation History:</strong> Longer conversations require larger context windows to "remember" earlier parts of the dialogue.</li>
+                        <li><strong>Processing Large Documents:</strong> If the AI needs to analyze or summarize lengthy texts provided as input.</li>
+                    </ul>
+                    <p>Context window sizes vary (e.g., 128k tokens to over 1M tokens for some models). Larger windows generally mean higher processing costs and potentially increased latency. Match the window size to the task's actual needs. The methodological paper notes this "significantly impacting user experience in dialogue-based or analytical applications."</p>
+                </div>
+            </article>
+
+            <article id="q1_6" class="question-block">
+                <h3 class="question-title">Q1.6: Does the research require specialized model capabilities? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>Beyond standard generation, does the study hinge on specific AI strengths like:</p>
+                    <ul>
+                        <li>Advanced reasoning (as mentioned in Q1.4)</li>
+                        <li>Highly creative or stylistic writing</li>
+                        <li>Accurate code generation in specific languages</li>
+                        <li>Knowledge in niche domains (though most large models have broad knowledge)</li>
+                    </ul>
+                    <p>If yes, prioritize models benchmarked or known for these particular strengths. "Evaluating these functional strengths is vital for aligning the model's capabilities with the application's core purpose" (from the methodological paper).</p>
+                </div>
+            </article>
+
+            <article id="q1_7" class="question-block">
+                <h3 class="question-title">Q1.7: What are the implications of model size? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>Model size (number of parameters) generally correlates with:</p>
+                    <ul>
+                        <li><strong>Performance:</strong> Larger models often capture more intricate patterns, leading to improved output quality (up to a point, as per "Scaling Laws" mentioned in the methodological paper).</li>
+                        <li><strong>Cost:</strong> Larger models are more expensive for API usage (inference) and require more resources if self-hosted.</li>
+                        <li><strong>Latency:</strong> Larger models can take longer to generate responses.</li>
+                        <li><strong>Environmental Impact:</strong> Greater computational needs for training and inference translate to a larger carbon footprint (see <a href="https://dl.acm.org/doi/10.1145/3630106.3658542" target="_blank" rel="noopener noreferrer">Luccioni et al. 2024</a>, <a href="https://news.mit.edu/2024/explained-generative-ai-environmental-impact-0117" target="_blank" rel="noopener noreferrer">Zewe 2024/2025</a>, cited in the methodological paper).</li>
+                    </ul>
+                    <p>The methodological paper emphasizes that "while larger models offer potential performance advantages, they come with significant trade-offs." Aim for the smallest/most efficient model that adequately meets research requirements.</p>
+                </div>
+            </article>
+            <p><a href="#table-of-contents" class="back-to-top">Back to Table of Contents</a></p>
+        </section>
+
+        <section id="section2" class="guide-section">
+            <h2>2. API Usage & Configuration (Q2.x)</h2>
+            <p class="section-intro">Effectively using a GenAI model involves interacting with its Application Programming Interface (API). This section covers key API considerations, which allow an application to communicate with the GenAI model.</p>
+
+            <article id="q2_1" class="question-block">
+                <h3 class="question-title">Q2.1: What are the best API parameters to configure? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>APIs allow setting parameters to influence model behavior (referencing Table 4 in the methodological paper for LLM parameters):</p>
+                    <ul>
+                        <li><strong><code>model</code></strong>: Crucial for specifying the exact model version for reproducibility (e.g., "gpt-4o-mini", "gemini-1.5-flash-latest"). This is vital for research validity as models evolve.</li>
+                        <li><strong><code>temperature</code></strong>: Controls randomness. Lower values (e.g., 0.2) make output more focused and deterministic; higher values (e.g., 0.8) increase creativity and variability.</li>
+                        <li><strong><code>max_tokens</code> (or <code>max_output_tokens</code>)</strong>: Limits the length of the generated response, impacting cost and response time.</li>
+                        <li><strong>System Prompt/Instructions (<code>role: 'system'</code>)</strong>: Defines the AI's persona, task, or output style (see the methodological paper's Appendix for an example podcast assistant system prompt).</li>
+                        <li><strong>Streaming</strong>: Determines if the response is sent token-by-token (improves perceived speed for users) or all at once.</li>
+                        <li><strong>Other model-specific parameters</strong>: Image models have parameters for style, size, etc. (see Q2.4). Reasoning models might have parameters for "reasoning effort."</li>
+                    </ul>
+                    <p>Experimentation is often needed. The <a href="https://genai-interaction-research.github.io/script_generator/" target="_blank" rel="noopener noreferrer">GenAI Script Snippet Generator</a> can help get started with basic API calls.</p>
+                </div>
+            </article>
+
+            <article id="q2_2" class="question-block">
+                <h3 class="question-title">Q2.2: How can context be provided to an API call? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>GenAI APIs are typically stateless (each call is independent). Context must be provided within each request payload:</p>
+                    <ul>
+                        <li><strong>System Prompt:</strong> Provides overall instructions or persona for the AI's behavior throughout an interaction (see Q2.1).</li>
+                        <li><strong>Conversation History (<code>messages</code> array for chat models):</strong> For multi-turn dialogues, the backend needs to manage and send the relevant past user messages (<code>role: 'user'</code>) and AI responses (<code>role: 'assistant'</code> or <code>role: 'model'</code>) back to the API with each new user prompt.</li>
+                        <li><strong>User Prompt:</strong> The current input from the participant for this specific turn.</li>
+                        <li><strong>Embedded Data / RAG (Advanced):</strong> For providing specific documents or data for the AI to use (Retrieval-Augmented Generation), this often involves more complex logic or specialized platforms to inject relevant snippets into the prompt. For more on RAG, see resources from providers like <a href="https://aws.amazon.com/what-is/retrieval-augmented-generation/" target="_blank" rel="noopener noreferrer">AWS</a> or <a href="https://www.pinecone.io/learn/retrieval-augmented-generation/" target="_blank" rel="noopener noreferrer">Pinecone</a>.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article id="q2_3" class="question-block">
+                <h3 class="question-title">Q2.3: How will the API key be securely managed and used in requests? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p><strong>CRITICAL: Never expose API keys in frontend code (JavaScript) or commit them to version control (e.g., Git).</strong> This is a major security vulnerability (as highlighted in the methodological paper, citing Lu 2014 and Costello et al. 2024).</p>
+                    <ul>
+                        <li><strong>Backend Responsibility:</strong> API keys should ONLY be stored and used within the secure backend server environment.</li>
+                        <li><strong>Environment Variables:</strong> Standard practice is to store keys in environment variables on the server.
+                            <ul>
+                                <li>Locally, use a <code>.env</code> file (add this file to <code>.gitignore</code>).</li>
+                                <li>In production (on the hosting provider), use the platform's secret management tools (e.g., AWS Secrets Manager, Google Secret Manager, GitHub Actions Secrets).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Backend Code Access:</strong> Backend code (e.g., Python with <code>os.getenv('YOUR_API_KEY')</code>) reads the key from the environment.</li>
+                        <li><strong>Authorization Header:</strong> The API key is typically sent in the "Authorization" header of the API request (e.g., `Authorization: Bearer $API_KEY`). See <a href="https://owasp.org/www-project-api-security/" target="_blank" rel="noopener noreferrer">OWASP API Security Top 10 (Authentication)</a> for general principles.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article id="q2_4" class="question-block">
+                <h3 class="question-title">Q2.4: What specific API parameters are needed for the chosen model type? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>Beyond common LLM parameters like temperature and max_tokens:</p>
+                    <ul>
+                        <li><strong>Image Models:</strong> Often require parameters for <code>style</code> (e.g., "photorealistic", "cartoon"), image <code>width</code>/<code>height</code> or <code>aspect_ratio</code>, <code>negative_prompt</code> (elements to avoid), number of images to generate (<code>n</code>), output format (e.g., URL, base64). The methodological paper's image generation showcase used Recraft and Clipdrop APIs, which would have their own specifics.</li>
+                        <li><strong>Code Models:</strong> May have parameters for target programming language, specific libraries/frameworks, or context for code completion.</li>
+                        <li><strong>Audio/Video Models:</strong> Will have parameters for voice selection (for TTS), audio format, video duration, resolution, frames per second, etc.</li>
+                    </ul>
+                    <p><strong>Always consult the official API documentation for the specific GenAI service and model chosen.</strong></p>
+                </div>
+            </article>
+
+            <article id="q2_5" class="question-block">
+                <h3 class="question-title">Q2.5: How will API request parameters be standardized and documented? <span class="toggle-icon">[+]</span></h3>
+                <div class="answer-guidance" style="display: none;">
+                    <p>For research reproducibility (also covered in Q5.4), meticulous documentation is essential:</p>
+                    <ul>
+                        <li><strong>Document Exact Model Version:</strong> Record the precise model name and version used during the study period (e.g., 'gpt-4o-mini-2024-07-18', 'gemini-1.5-flash-001'). Model behavior can change with updates.</li>
+                        <li><strong>Record All Parameters:</strong> List every parameter set in API calls (temperature, max_tokens, the full system prompt, image styles, etc.) in the study's methods section or as supplementary material.</li>
+                        <li><strong>Consistency:</strong> Ensure these parameters are applied consistently across all participants within a given experimental condition. Use configuration files or constants in backend code rather than hardcoding values in multiple places. This avoids accidental variations.</li>
+                        <li><strong>Version Control Code:</strong> Use Git to track changes to backend code that constructs and sends API requests.</li>
+                    </ul>
+                    <p>This rigor allows others to understand and potentially replicate the methodology and findings.</p>
+                </div>
+            </article>
+            <p><a href="#table-of-contents" class="back-to-top">Back to Table of Contents</a></p>
+        </section>
+
+        <section id="section3" class="guide-section">
+            <h2>3. Frontend Design & Setup (Q3.x)</h2>
+            <p class="section-intro">The frontend is how participants interact with the GenAI application. This typically involves HTML for structure, CSS for styling, and JavaScript for interactivity and communication with the backend.</p>
+            <article class="question-block"><h3 class="question-title">Q3.1: How will participants interact? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Consider text input, voice, drawing, etc. The methodological paper's showcase 1 used text and voice (Web Speech API - see <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API" target="_blank" rel="noopener noreferrer">MDN Web Speech API</a>).</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q3.2: Design choices for participant experience? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Focus on clarity, feedback (loading states, errors), readable response display, and accessibility (e.g., <a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" rel="noopener noreferrer">WCAG guidelines</a>).</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q3.3: Frontend hosting / survey platforms? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Qualtrics (embedding JS - see <a href="https://www.qualtrics.com/support/survey-platform/survey-module/question-options/add-javascript/" target="_blank" rel="noopener noreferrer">Qualtrics JavaScript guide</a>) is a key example in the methodological paper. Custom frontends can be hosted on <a href="https://www.netlify.com/" target="_blank" rel="noopener noreferrer">Netlify</a>, <a href="https://vercel.com/" target="_blank" rel="noopener noreferrer">Vercel</a>, <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">GitHub Pages</a>.</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q3.4: Tracking participant inputs and GenAI text outputs? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Qualtrics Embedded Data is the primary method discussed in the methodological paper for storing prompts and responses. Alternatives include backend databases.</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q3.5: Storing non-text outputs (images, audio, video) & linking? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>External cloud storage (e.g., <a href="https://cloudinary.com/" target="_blank" rel="noopener noreferrer">Cloudinary</a>, <a href="https://aws.amazon.com/s3/" target="_blank" rel="noopener noreferrer">AWS S3</a>) is necessary. The backend uploads the media and returns a URL/identifier to the frontend, which saves it to Qualtrics Embedded Data (as in the methodological paper's image showcase).</p></div></article>
+            <p><a href="#table-of-contents" class="back-to-top">Back to Table of Contents</a></p>
+        </section>
+
+        <section id="section4" class="guide-section">
+            <h2>4. Backend Design & Hosting (Q4.x)</h2>
+            <p class="section-intro">A backend is crucial for security (API key protection) and centralized control when connecting the frontend to GenAI services.</p>
+            <article class="question-block"><h3 class="question-title">Q4.1: Expected backend traffic? (*) <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Estimate participant numbers, interactions per participant, and peak usage times to inform hosting choices. This will impact cost and performance considerations.</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q4.2: Hosting solutions for performance/cost balance based on traffic? (*) <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>This relates to Q4.5. Consider serverless (FaaS), PaaS, or IaaS based on traffic, technical expertise, and output modality.</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q4.3: Is a backend necessary for security and control? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>The methodological paper strongly argues YES, to protect API keys and manage interaction logic reliably. Direct frontend calls are highly insecure.</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q4.4: Specific backend responsibilities needed? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Credential management, API call logic, input validation, response processing, history management, non-text output handling (storage), optional rate limiting/moderation.</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q4.5: Which hosting model (IaaS, PaaS, FaaS/Serverless) best suits? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>The methodological paper suggests FaaS (serverless - e.g., <a href="https://aws.amazon.com/lambda/" target="_blank" rel="noopener noreferrer">AWS Lambda</a>, <a href="https://cloud.google.com/functions" target="_blank" rel="noopener noreferrer">Google Cloud Functions</a>) is often well-suited for typical research with variable load due to auto-scaling and pay-per-use. PaaS (e.g., <a href="https://www.heroku.com/" target="_blank" rel="noopener noreferrer">Heroku</a>, <a href="https://cloud.google.com/appengine" target="_blank" rel="noopener noreferrer">Google App Engine</a>) is also viable. IaaS (e.g., <a href="https://www.digitalocean.com/products/droplets" target="_blank" rel="noopener noreferrer">Digital Ocean Droplets</a>, <a href="https://aws.amazon.com/ec2/" target="_blank" rel="noopener noreferrer">AWS EC2</a>) might be needed for very resource-heavy tasks (e.g., the image showcase in the paper used IaaS).</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q4.6: Have cloud provider service limits or quotas been checked? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Proactively check and request increases if the anticipated load might exceed default quotas (for CPU, concurrent executions, API gateway requests, etc.) to prevent service disruption. See documentation for the chosen provider (e.g., <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html" target="_blank" rel="noopener noreferrer">AWS Service Quotas</a>).</p></div></article>
+            <p><a href="#table-of-contents" class="back-to-top">Back to Table of Contents</a></p>
+        </section>
+
+        <section id="section5" class="guide-section">
+            <h2>5. General Considerations (Ethics, etc.) (Q5.x)</h2>
+            <p class="section-intro">Ethical conduct, data privacy, reliability, and reproducibility are paramount in GenAI research.</p>
+            <article class="question-block"><h3 class="question-title">Q5.1: How will ethical principles be addressed? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Informed consent (disclosing AI use and potential provider tracking), data privacy, awareness of model bias (see resources like <a href="https://www.weforum.org/agenda/2023/06/ai-bias-how-to-ensure-fairness-in-artificial-intelligence-systems/" target="_blank" rel="noopener noreferrer">WEF on AI Bias</a>), fairness, and transparency. Refer to ethical AI frameworks (e.g., from <a href="https://www.oecd.org/ai/principles/" target="_blank" rel="noopener noreferrer">OECD AI Principles</a> or relevant institutional IRB guidelines).</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q5.2: How will participant PII be protected? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Design prompts to avoid soliciting Personally Identifiable Information (PII). Do NOT feed pre-collected PII to GenAI. Consider backend PII redaction/filtering if risk is high (e.g., <a href="https://microsoft.github.io/presidio/" target="_blank" rel="noopener noreferrer">Microsoft Presidio</a>, <a href="https://cloud.google.com/dlp/docs/concepts-redaction" target="_blank" rel="noopener noreferrer">Google Cloud DLP</a>). Understand PII definitions (e.g., <a href="https://csrc.nist.gov/glossary/term/personally_identifiable_information" target="_blank" rel="noopener noreferrer">NIST definition</a>).</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q5.3: Monitoring, logging, and error handling strategies? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Monitor server health. Implement backend logging for requests, API calls, errors (e.g., using Python's `logging` module). Robust error handling in backend and frontend to inform users gracefully.</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q5.4: How will model version and API configuration be documented for reproducibility? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Meticulously document the specific model (name, version), all API parameters used, and version control the code (e.g., using Git). Essential for research validity and replicability. See guidelines on reporting AI research like <a href="https://www.nature.com/articles/s42256-023-00720-3" target="_blank" rel="noopener noreferrer">Nature Machine Intelligence recommendations</a>.</p></div></article>
+            <article class="question-block"><h3 class="question-title">Q5.5: How will potential participant connectivity issues be handled? <span class="toggle-icon">[+]</span></h3><div class="answer-guidance" style="display: none;"><p>Frontend should handle errors connecting to the backend. Backend handles errors connecting to GenAI API. Consider an initial connectivity pre-check in the study.</p></div></article>
+            <p><a href="#table-of-contents" class="back-to-top">Back to Table of Contents</a></p>
+        </section>
+
+        <section id="tools-and-resources" class="guide-section">
+            <h2>6. Tools & Additional Resources</h2>
+            <p>Leverage these tools and resources to help implement a GenAI research application:</p>
+            <ul>
+                <li>
+                    <strong>Methodological Paper & GitHub Organization:</strong>
+                    <ul>
+                        <li>
+                            Full Paper: <a href="https://github.com/GenAI-interaction-research/paper-and-resources/blob/main/250424_GenAI_web_apps_v0.1.pdf" target="_blank" rel="noopener noreferrer">Building GenAI-Driven Web Applications to Study USER-GenAI Interaction</a>
+                        </li>
+                        <li>
+                            Main GitHub Organization: <a href="https://github.com/GenAI-interaction-research" target="_blank" rel="noopener noreferrer">https://github.com/GenAI-interaction-research</a> (Code for showcases, rule templates for AI IDEs, ethical considerations, etc.)
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Script Snippet Generator:</strong>
+                    <ul>
+                        <li>
+                            <a href="https://genai-interaction-research.github.io/script_generator/" target="_blank" rel="noopener noreferrer">GenAI Script Snippet Generator</a> (For quick start script snippets.)
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>Model Comparison Tools:</strong>
+                    <ul>
+                        <li><a href="https://artificialanalysis.ai/" target="_blank" rel="noopener noreferrer">Artificial Analysis</a></li>
+                        <li><a href="https://chat.lmsys.org/" target="_blank" rel="noopener noreferrer">LMSys Chatbot Arena</a></li>
+                    </ul>
+                </li>
+                <li><strong>Relevant Documentation:</strong>
+                    <ul>
+                        <li>Cloud Hosting Provider Documentation (for backend deployment specific to AWS, Google Cloud, Azure, Heroku, Digital Ocean, etc.)</li>
+                        <li>Qualtrics Support on Adding JavaScript (if using Qualtrics for frontend).</li>
+                        <li>API Documentation for chosen GenAI model(s).</li>
+                    </ul>
+                </li>
+            </ul>
+            <p><a href="#table-of-contents" class="back-to-top">Back to Table of Contents</a></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>This guide is based on "Building GenAI-Driven Web Applications to Study USER-GenAI Interaction: A Methodological Guide."</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
